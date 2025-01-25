@@ -1,8 +1,8 @@
 FROM php:7.4-fpm
 
 # Arguments defined in docker-compose.yml
-ARG user
-ARG uid
+# ARG user
+# ARG uid
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -24,9 +24,8 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd sockets
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+# RUN mkdir -p /home/$user/.composer && \
+#     chown -R $user:$user /home/$user
 
 # Install redis
 RUN pecl install -o -f redis \
@@ -39,7 +38,7 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs
 
 # Set npm cache and prefix for permissions
-RUN npm config set prefix /home/$user/.npm-global
+# RUN npm config set prefix /home/$user/.npm-global
 
 # Configurar cache do npm
 RUN npm config set cache /var/www/.npm-cache --global \
@@ -50,7 +49,7 @@ RUN node -v
 RUN npm -v
 
 COPY package.json package-lock.json /var/www/
-USER root
+# USER root
 RUN npm install
 # Copiar os arquivos do frontend
 COPY . /var/www/
@@ -58,4 +57,4 @@ COPY . /var/www/
 # Set working directory
 WORKDIR /var/www
 
-USER $user
+# USER $user

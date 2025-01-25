@@ -33,6 +33,21 @@ RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
+
+# Instalar Node.js e npm
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs
+
+# Verificar as versões do Node.js e npm
+RUN node -v
+RUN npm -v
+
+COPY package.json package-lock.json /var/www/
+RUN npm install
+
+# Copiar os arquivos do frontend
+COPY . /var/www/
+
 # Set working directory
 WORKDIR /var/www
 

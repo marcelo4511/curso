@@ -2,8 +2,8 @@ version: "3.7"
 services:
     # image project
     curso_do:
-        build: 
-            args: 
+        build:
+            args:
                 user: carlos
                 uid: 1000
             context: ./
@@ -13,61 +13,71 @@ services:
         working_dir: /var/www/
         volumes:
             - ./:/var/www
-        depends_on: 
+        depends_on:
             - redis
             - queue
-        networks: 
+        networks:
             - projectx
-    
+
     # nginx
     nginx:
         image: nginx:alpine
         restart: unless-stopped
-        ports: 
+        ports:
             - 80:80
-        volumes: 
+        volumes:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
-        networks: 
+        networks:
             - projectx
 
     # db mysql
     mysql:
         image: mysql:5.7.22
         restart: unless-stopped
-        environment: 
+        environment:
             MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_USER: ${DB_USERNAME}
-        volumes: 
+        volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
-        networks: 
+        networks:
+            - projectx
+
+    node:
+        image: node:16-alpine
+        container_name: vue-app
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+        command: "npm run dev"
+        networks:
             - projectx
 
     # queue
     queue:
-        build: 
-            args: 
+        build:
+            args:
                 user: carlos
                 uid: 1000
             context: ./
             dockerfile: Dockerfile
         restart: unless-stopped
         command: "php artisan queue:work"
-        volumes: 
+        volumes:
             - ./:/var/www
-        depends_on: 
+        depends_on:
             - redis
-        networks: 
+        networks:
             - projectx
 
     # redis
     redis:
         image: redis:latest
-        networks: 
+        networks:
             - projectx
 
-networks: 
+networks:
     projectx:
         driver: bridge

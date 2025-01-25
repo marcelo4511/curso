@@ -2,12 +2,9 @@ version: "3.7"
 services:
     # image project
     curso_do:
-        # build:
-        #     args:
-        #         user: carlos
-        #         uid: 1000
-        #     context: ./
-        #     dockerfile: Dockerfile
+        build:
+            context: ./
+            dockerfile: Dockerfile
         image: laravel-app
         restart: unless-stopped
         working_dir: /var/www/
@@ -58,12 +55,9 @@ services:
 
     # queue
     queue:
-        # build:
-        #     args:
-        #         user: carlos
-        #         uid: 1000
-        #     context: ./
-        #     dockerfile: Dockerfile
+        build:
+            context: ./
+            dockerfile: Dockerfile
         restart: unless-stopped
         command: "php artisan queue:work"
         volumes:

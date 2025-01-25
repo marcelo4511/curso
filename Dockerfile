@@ -50,8 +50,8 @@ RUN node -v
 RUN npm -v
 
 COPY package.json package-lock.json /var/www/
+USER root
 RUN npm install
-
 # Copiar os arquivos do frontend
 COPY . /var/www/
 

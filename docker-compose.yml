@@ -54,6 +54,7 @@ services:
         command: "npm run dev"
         networks:
             - projectx
+        user: "0:0"
 
     # queue
     queue:

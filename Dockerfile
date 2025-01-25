@@ -41,6 +41,10 @@ RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
 # Set npm cache and prefix for permissions
 RUN npm config set prefix /home/$user/.npm-global
 
+# Configurar cache do npm
+RUN npm config set cache /var/www/.npm-cache --global \
+    && mkdir -p /var/www/.npm-cache && chmod -R 777 /var/www/.npm-cache
+
 # Verificar as versões do Node.js e npm
 RUN node -v
 RUN npm -v

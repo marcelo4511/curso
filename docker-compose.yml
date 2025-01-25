@@ -1,20 +1,19 @@
 version: "3.7"
-
 services:
     # image project
     curso_do:
-        build:
-            context: . # Diretório atual, onde o Dockerfile está localizado
-            dockerfile: Dockerfile # Certifique-se de que o nome do Dockerfile está correto
-        image: laravel-app # Nome da imagem que será criada
-        restart: unless-stopped # Reiniciar se o contêiner parar
-        working_dir: /var/www/ # Definindo o diretório de trabalho
-        volumes:
-            - ./:/var/www # Mapeando a pasta local para o diretório no contêiner
-        depends_on:
-            - redis # Dependência do Redis
-        networks:
-            - projectx # Rede Docker personalizada
+    build:
+        context: .
+        dockerfile: Dockerfile
+    image: laravel-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+        - ./:/var/www
+    depends_on:
+        - redis
+    networks:
+        - projectx
 
     # nginx
     nginx:
@@ -33,7 +32,7 @@ services:
         image: mysql:5.7.22
         restart: unless-stopped
         environment:
-            MYSQL_DATABASE: ${DB_DATABASE} # Certifique-se de que as variáveis estejam no arquivo .env
+            MYSQL_DATABASE: ${DB_DATABASE}
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
             MYSQL_PASSWORD: ${DB_PASSWORD}
             MYSQL_USER: ${DB_USERNAME}
@@ -51,7 +50,7 @@ services:
         command: "npm run dev"
         networks:
             - projectx
-        user: "0:0" # Execução como root (0:0)
+        user: "0:0"
 
     # queue
     queue:

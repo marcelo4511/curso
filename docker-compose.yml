@@ -10,7 +10,6 @@ services:
             - ./:/var/www
         depends_on:
             - redis
-            - queue
         networks:
             - projectx
 
@@ -52,18 +51,18 @@ services:
         user: "0:0"
 
     # queue
-    queue:
-        build:
-            context: ./
-            dockerfile: Dockerfile
-        restart: unless-stopped
-        working_dir: /var/www/
-        volumes:
-            - ./:/var/www
-        depends_on:
-            - redis
-        networks:
-            - projectx
+    # queue:
+    #     build:
+    #         context: ./
+    #         dockerfile: Dockerfile
+    #     restart: unless-stopped
+    #     working_dir: /var/www/
+    #     volumes:
+    #         - ./:/var/www
+    #     depends_on:
+    #         - redis
+    #     networks:
+    #         - projectx
 
     # redis
     redis:
